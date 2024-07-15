@@ -7,10 +7,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         .feedback-container {
             text-align: center;
-            margin-top: 50px;
             position: relative;
         }
         .feedback-button {
@@ -34,9 +38,9 @@
             text-align: center;
         }
         #fullscreen-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
             font-size: 30px;
             background: none;
             border: none;
@@ -47,7 +51,6 @@
 <body>
     <div class="feedback-container">
         <h1>Feedback Laboratorium Ideal</h1>
-        <button id="fullscreen-button" class="feedback-button">⛶</button>
         <div id="feedback-buttons">
             <div class="feedback-item">
                 <button class="feedback-button" data-value="1">😡</button>
@@ -73,6 +76,8 @@
         <p id="status-message"></p>
     </div>
     
+    <button id="fullscreen-button" class="feedback-button">⛶</button>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const feedbackButtons = document.querySelectorAll('.feedback-button');
@@ -97,6 +102,11 @@
                             console.error('Error mengirim feedback');
                         }
                     });
+
+                    // Reset pesan setelah 10 detik
+                    setTimeout(() => {
+                        statusMessage.textContent = '';
+                    }, 10000); // 10000 milidetik = 10 detik
                 });
             });
 
@@ -111,6 +121,28 @@
                 // Hapus pesan status saat masuk fullscreen
                 statusMessage.textContent = '';
             });
+
+            // Fungsi untuk mengatur posisi elemen feedback-container saat layar penuh
+            function adjustFeedbackContainerPosition() {
+                const feedbackContainer = document.querySelector('.feedback-container');
+                if (document.fullscreenElement) {
+                    feedbackContainer.style.position = 'fixed';
+                    feedbackContainer.style.top = '50%';
+                    feedbackContainer.style.left = '50%';
+                    feedbackContainer.style.transform = 'translate(-50%, -50%)';
+                } else {
+                    feedbackContainer.style.position = 'relative';
+                    feedbackContainer.style.top = 'auto';
+                    feedbackContainer.style.left = 'auto';
+                    feedbackContainer.style.transform = 'none';
+                }
+            }
+
+            // Panggil fungsi saat perubahan layar penuh
+            document.addEventListener('fullscreenchange', adjustFeedbackContainerPosition);
+            document.addEventListener('webkitfullscreenchange', adjustFeedbackContainerPosition);
+            document.addEventListener('mozfullscreenchange', adjustFeedbackContainerPosition);
+            document.addEventListener('MSFullscreenChange', adjustFeedbackContainerPosition);
         });
     </script>
 </body>
