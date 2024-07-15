@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback Form</title>
+    <style>
+        .feedback-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        .feedback-button {
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 40px;
+            border: none;
+            background: none;
+        }
+        .feedback-button:hover {
+            transform: scale(1.2);
+        }
+        .feedback-description {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        .feedback-item {
+            display: inline-block;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="feedback-container">
+        <h1>Feedback Laboratorium Ideal</h1>
+        <div id="feedback-buttons">
+            <div class="feedback-item">
+                <button class="feedback-button" data-value="1">😡</button>
+                <div class="feedback-description">Sangat Tidak Puas</div>
+            </div>
+            <div class="feedback-item">
+                <button class="feedback-button" data-value="2">😟</button>
+                <div class="feedback-description">Tidak Puas</div>
+            </div>
+            <div class="feedback-item">
+                <button class="feedback-button" data-value="3">😐</button>
+                <div class="feedback-description">Netral</div>
+            </div>
+            <div class="feedback-item">
+                <button class="feedback-button" data-value="4">😊</button>
+                <div class="feedback-description">Puas</div>
+            </div>
+            <div class="feedback-item">
+                <button class="feedback-button" data-value="5">😍</button>
+                <div class="feedback-description">Sangat Puas</div>
+            </div>
+        </div>
+        <p id="status-message"></p>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const feedbackButtons = document.querySelectorAll('.feedback-button');
+            const statusMessage = document.getElementById('status-message');
+
+            feedbackButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    statusMessage.textContent = `Terima kasih atas feedback Anda! Nilai Anda: ${value}`;
+
+                    // Kirim data ke Google Sheets
+                    fetch('https://script.google.com/macros/s/AKfycbzF8iCs8rjkDSQmu05cBj5s_RQYWiS5Sy0MaIyqFMSrzrMzpSNEYBDNGpXEO54lfMin5Q/exec', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `feedback=${value}`
+                    }).then(response => {
+                        if (response.ok) {
+                            console.log('Feedback berhasil dikirim');
+                        } else {
+                            console.error('Error mengirim feedback');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
