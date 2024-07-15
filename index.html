@@ -22,7 +22,7 @@
             justify-content: center;
             align-items: center;
             margin-top: 20px;
-            flex-wrap: wrap; /* Menambahkan flex-wrap untuk tata letak responsif */
+            flex-wrap: wrap; /* Mengizinkan wrapping jika tidak cukup lebar */
         }
         .feedback-button {
             display: inline-block;
@@ -41,8 +41,11 @@
             margin-top: 5px;
         }
         .feedback-item {
-            display: inline-block;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
+            margin: 10px;
         }
         #fullscreen-button {
             position: fixed;
@@ -52,17 +55,18 @@
             background: none;
             border: none;
             cursor: pointer;
-            z-index: 10; /* Menambahkan z-index agar tombol tetap di atas konten lain */
+            z-index: 10; /* Membuat tombol tetap di atas konten lainnya */
         }
 
         /* Media query untuk tablet */
         @media screen and (max-width: 768px) {
             .feedback-buttons {
-                flex-wrap: wrap;
+                flex-direction: column;
+                align-items: center;
             }
             .feedback-item {
-                width: 100%;
-                text-align: center;
+                width: auto;
+                margin: 5px;
             }
         }
     </style>
