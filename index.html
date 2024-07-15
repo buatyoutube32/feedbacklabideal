@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Form</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
         .feedback-container {
             text-align: center;
             margin-top: 50px;
+            position: relative;
         }
         .feedback-button {
             display: inline-block;
@@ -29,11 +33,21 @@
             display: inline-block;
             text-align: center;
         }
+        #fullscreen-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 30px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="feedback-container">
         <h1>Feedback Laboratorium Ideal</h1>
+        <button id="fullscreen-button" class="feedback-button">⛶</button>
         <div id="feedback-buttons">
             <div class="feedback-item">
                 <button class="feedback-button" data-value="1">😡</button>
@@ -58,16 +72,17 @@
         </div>
         <p id="status-message"></p>
     </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const feedbackButtons = document.querySelectorAll('.feedback-button');
             const statusMessage = document.getElementById('status-message');
+            const fullscreenButton = document.getElementById('fullscreen-button');
 
             feedbackButtons.forEach(button => {
                 button.addEventListener('click', function() {
                     const value = this.getAttribute('data-value');
                     statusMessage.textContent = `Terima kasih atas feedback Anda! Nilai Anda: ${value}`;
-
                     // Kirim data ke Google Sheets
                     fetch('https://script.google.com/macros/s/AKfycbzF8iCs8rjkDSQmu05cBj5s_RQYWiS5Sy0MaIyqFMSrzrMzpSNEYBDNGpXEO54lfMin5Q/exec', {
                         method: 'POST',
@@ -83,6 +98,18 @@
                         }
                     });
                 });
+            });
+
+            fullscreenButton.addEventListener('click', function() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+                // Hapus pesan status saat masuk fullscreen
+                statusMessage.textContent = '';
             });
         });
     </script>
